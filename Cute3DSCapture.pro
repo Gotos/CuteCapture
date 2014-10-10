@@ -16,3 +16,6 @@ HEADERS += \
     3dscapture.h
 
 LIBS     += -lusb-1.0
+
+OTHER_FILES += \
+    README.md
