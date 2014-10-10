@@ -58,6 +58,9 @@ int main()
         {
             switch(event.type) {
             case sf::Event::Closed:
+                if (bottom_window.isOpen()) {
+                    bottom_window.close();
+                }
                 window.close();
                 break;
             case sf::Event::KeyPressed:
@@ -102,7 +105,53 @@ int main()
         }
 
         if (bottom_window.isOpen()) {
-            //printf("open\n");
+            while (bottom_window.pollEvent(event))
+            {
+                switch(event.type) {
+                case sf::Event::Closed:
+                    bottom_window.close();
+                    window.close();
+                    break;
+                case sf::Event::KeyPressed:
+                    switch(event.key.code) {
+                    case sf::Keyboard::Num1:
+                        bottom_window.setSize(sf::Vector2u(320, 240));
+                        break;
+                    case sf::Keyboard::Num2:
+                        bottom_window.setSize(sf::Vector2u(480, 360));
+                        break;
+                    case sf::Keyboard::Num3:
+                        bottom_window.setSize(sf::Vector2u(640, 480));
+                        break;
+                    case sf::Keyboard::Num4:
+                        bottom_window.setSize(sf::Vector2u(800, 600));
+                        break;
+                    case sf::Keyboard::Num5:
+                        bottom_window.setSize(sf::Vector2u(960, 840));
+                        break;
+                    case sf::Keyboard::Space:
+                        if (!split) {
+                            window.setView(top);
+                            window.setSize(sf::Vector2u(400, 240));
+                            bottom_window.create(sf::VideoMode(320, 240), "Bottom Screen Cute 3DS Capture");
+                            bottom_window.setView(bottom);
+                            split = true;
+                        } else {
+                            window.setView(total);
+                            window.setSize(sf::Vector2u(400, 480));
+                            bottom_window.close();
+                            split = false;
+                        }
+                        break;
+                    default:
+                        break;
+                    }
+
+                default:
+                    break;
+                }
+
+            }
         }
 
         frames++;
