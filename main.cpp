@@ -178,8 +178,6 @@ int main()
 
         frameResult = capture_grabFrame(frameBuf);
         if(frameResult != CAPTURE_OK) {
-            //printf("capture_grapFrame() error\n");
-            //return;
             goto error;
         }
 
@@ -189,8 +187,6 @@ int main()
         texture.create(int(FRAMEWIDTH),int(FRAMEHEIGHT));
 
         texture.update(rgbaBuf,int(FRAMEWIDTH),int(FRAMEHEIGHT),0,0);
-
-        //texture.loadFromFile("out.png");
 
         error:
         window.draw(top_screen);
