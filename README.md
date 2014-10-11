@@ -8,7 +8,7 @@ Install SFML and the SFML-Headers (libsfml-dev or similar). Then, simple do ```q
 
 # How to use
 
-Start Cute3DSCapture. You can autoresize the window with 1-5 (1x, 1.5x, 2x, 2.5x, 3x original size). Press the spacebar to toggel window split.
+Start Cute3DSCapture. You can autoresize the window with 1-0 (1x, 1.5x, 2x,... original size). Press the spacebar to toggel window split.
 
 # Why "Cute" 3DS Capture?
 

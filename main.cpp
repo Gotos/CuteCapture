@@ -78,7 +78,22 @@ int main()
                     window.setSize(sf::Vector2u(1000, 600*(2-int(split))));
                     break;
                 case sf::Keyboard::Num5:
-                    window.setSize(sf::Vector2u(1200, 840*(2-int(split))));
+                    window.setSize(sf::Vector2u(1200, 720*(2-int(split))));
+                    break;
+                case sf::Keyboard::Num6:
+                    window.setSize(sf::Vector2u(1400, 840*(2-int(split))));
+                    break;
+                case sf::Keyboard::Num7:
+                    window.setSize(sf::Vector2u(1600, 960*(2-int(split))));
+                    break;
+                case sf::Keyboard::Num8:
+                    window.setSize(sf::Vector2u(1800, 1080*(2-int(split))));
+                    break;
+                case sf::Keyboard::Num9:
+                    window.setSize(sf::Vector2u(2000, 1200*(2-int(split))));
+                    break;
+                case sf::Keyboard::Num0:
+                    window.setSize(sf::Vector2u(2200, 1320*(2-int(split))));
                     break;
                 case sf::Keyboard::Space:
                     if (!split) {
@@ -127,7 +142,22 @@ int main()
                         bottom_window.setSize(sf::Vector2u(800, 600));
                         break;
                     case sf::Keyboard::Num5:
-                        bottom_window.setSize(sf::Vector2u(960, 840));
+                        bottom_window.setSize(sf::Vector2u(960, 720));
+                        break;
+                    case sf::Keyboard::Num6:
+                        bottom_window.setSize(sf::Vector2u(1120, 840));
+                        break;
+                    case sf::Keyboard::Num7:
+                        bottom_window.setSize(sf::Vector2u(1280, 960));
+                        break;
+                    case sf::Keyboard::Num8:
+                        bottom_window.setSize(sf::Vector2u(1440, 1080));
+                        break;
+                    case sf::Keyboard::Num9:
+                        bottom_window.setSize(sf::Vector2u(1600, 1200));
+                        break;
+                    case sf::Keyboard::Num0:
+                        bottom_window.setSize(sf::Vector2u(1760, 1320));
                         break;
                     case sf::Keyboard::Space:
                         if (!split) {
