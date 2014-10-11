@@ -29,7 +29,7 @@ int main()
     split = false;
     frames = 0;
     m_time = sf::Clock();
-    sf::RenderWindow window(sf::VideoMode(400, 480), "Cute 3DS Capture");//,sf::Style::Close);
+    sf::RenderWindow window(sf::VideoMode(400, 480), "Cute 3DS Capture");
     sf::RenderWindow bottom_window;
     sf::RectangleShape top_screen(sf::Vector2f(240,400));
     top_screen.rotate(-90);
