@@ -185,11 +185,11 @@ int main()
 
         frames++;
         if (m_time.getElapsedTime().asMilliseconds() > 250) {
-            char title[40];
+            char title[50];
             if (!split) {
                 sprintf(title,"Cute 3DS Capture (%.2f FPS)", float(frames)/(m_time.getElapsedTime().asSeconds()));
             } else {
-                sprintf(title,"Top Screen Cute 3DS Capture (%.2f FPS)", float(frames)/(m_time.getElapsedTime().asSeconds()));
+                sprintf(title,"Top Screen Cute 3DS Capture (%4.2f FPS)", float(frames)/(m_time.getElapsedTime().asSeconds()));
             }
             m_time.restart();
             frames = 0;
