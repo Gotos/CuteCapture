@@ -17,7 +17,8 @@ HEADERS += \
 LIBS     += -lusb-1.0
 
 OTHER_FILES += \
-    README.md
+    README.md \
+    95-3dscapture.rules
 
 #QMAKE_CXXFLAGS_RELEASE -= -O2
 #QMAKE_CFLAGS_RELEASE -= -O2

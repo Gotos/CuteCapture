@@ -1,0 +1,2 @@
+# Give r/w access to 3DS Capture board
+SUBSYSTEM=="usb", ATTR{idVendor}=="16d0", ATTR{idProduct}=="06a3", MODE="0666"
