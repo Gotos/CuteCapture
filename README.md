@@ -4,7 +4,7 @@ Cute 3DS Capture is a 3DS capturing software for linux (and possibly Mac OS X, a
 
 # How to compile
 
-Install SFML and the SFML-Headers (libsfml-dev or similar) as well as libusb and libusb-headers (libusb-dev). Then, simple do ```qmake && make```.
+Install SFML and the SFML-headers (libsfml-dev or similar) as well as libusb-1.0.0 and the headers (libusb-1.0.0-dev). Then, simple do ```qmake && make```.
 
 # How to use
 
