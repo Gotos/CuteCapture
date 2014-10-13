@@ -7,9 +7,9 @@ extern "C" {
 static sf::Clock m_time;
 static uint frames;
 static bool split;
+static bool init;
 
 void toRGBA(const uint8_t* rgb, uint8_t* rgba, const size_t count) {
-    //printf("Hallo");
     size_t i;
     for (i=0; i<count; i++) {
         rgba[4*i] = rgb[3*i];
@@ -21,11 +21,7 @@ void toRGBA(const uint8_t* rgb, uint8_t* rgba, const size_t count) {
 
 int main()
 {
-    if(!capture_init()) {
-        printf("capture_init() error\n");
-        capture_deinit();
-        return -1;
-    }
+    init = capture_init();
     split = false;
     frames = 0;
     m_time = sf::Clock();
@@ -44,6 +40,9 @@ int main()
 
 
     sf::Texture texture;
+    uint8_t tex[] = {0,0,0,255};
+    texture.create(int(FRAMEWIDTH),int(FRAMEHEIGHT));
+    texture.update(tex,1,1,0,0);
 
     top_screen.setTexture(&texture);
     top_screen.setTextureRect(sf::IntRect(0,0,240,400));
@@ -58,6 +57,7 @@ int main()
         {
             switch(event.type) {
             case sf::Event::Closed:
+                capture_deinit();
                 if (bottom_window.isOpen()) {
                     bottom_window.close();
                 }
@@ -124,6 +124,7 @@ int main()
             {
                 switch(event.type) {
                 case sf::Event::Closed:
+                    capture_deinit();
                     bottom_window.close();
                     window.close();
                     break;
@@ -202,23 +203,29 @@ int main()
             bottom_window.clear();
         }
 
-        uint8_t frameBuf[FRAMEBUFSIZE];
-        uint8_t rgbaBuf[FRAMESIZE*4/3];
-        int frameResult;
-
-        frameResult = capture_grabFrame(frameBuf);
-        if(frameResult != CAPTURE_OK) {
-            goto error;
+        if(!init) {
+            init = capture_init();
         }
 
+        uint8_t frameBuf[FRAMEBUFSIZE];
+        uint8_t rgbaBuf[FRAMESIZE*4/3];
+        if(init){
+            switch(capture_grabFrame(frameBuf)) {
+            case CAPTURE_OK:
+                toRGBA(frameBuf,rgbaBuf,FRAMESIZE/3);
+                texture.update(rgbaBuf,int(FRAMEWIDTH),int(FRAMEHEIGHT),0,0);
+                break;
+            case CAPTURE_ERROR:
+                capture_deinit();
+                init = false;
+                break;
+            /*case CAPTURE_SKIP:
+                break;*/
+            default:
+                break;
+            }
+        }
 
-        toRGBA(frameBuf,rgbaBuf,FRAMESIZE/3);
-
-        texture.create(int(FRAMEWIDTH),int(FRAMEHEIGHT));
-
-        texture.update(rgbaBuf,int(FRAMEWIDTH),int(FRAMEHEIGHT),0,0);
-
-        error:
         window.draw(top_screen);
         if (!split) {
             window.draw(bottom_screen);
