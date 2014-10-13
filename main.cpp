@@ -57,7 +57,6 @@ int main()
         {
             switch(event.type) {
             case sf::Event::Closed:
-                capture_deinit();
                 if (bottom_window.isOpen()) {
                     bottom_window.close();
                 }
@@ -124,7 +123,6 @@ int main()
             {
                 switch(event.type) {
                 case sf::Event::Closed:
-                    capture_deinit();
                     bottom_window.close();
                     window.close();
                     break;
@@ -235,7 +233,7 @@ int main()
         }
         window.display();
     }
-    capture_init();
+    capture_deinit();
     return 0;
 }
 
