@@ -13,4 +13,4 @@ configure
 depcomp
 install-sh
 missing
-
+*.tar.gz
