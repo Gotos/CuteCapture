@@ -1,0 +1,15 @@
+.deps/
+3dscapture.o
+Cute3DSCapture
+Makefile
+Makefile.in
+aclocal.m4
+autom4te.cache/
+compile
+config.log
+config.status
+depcomp
+install-sh
+main.o
+missing
+
