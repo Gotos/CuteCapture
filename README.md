@@ -1,6 +1,6 @@
 # What is Cute 3DS Capture?
 
-Cute 3DS Capture is a 3DS capturing software for linux (and possibly Mac OS X, although this is not yet tested). It is written in C++ and uses [SFML](http://www.sfml-dev.org/).
+Cute 3DS Capture (C3C) is a 3DS capturing software for linux and Mac OS X for use with the capture boards by [3dscapture.com](http://3dscapture.com). It is written in C++ and uses [SFML](http://www.sfml-dev.org/).
 
 # How to compile
 
@@ -14,4 +14,4 @@ If Cute3DSCapture doesn't detect your 3DS and you are using linux, copy 95-3dsca
 
 # Why "Cute" 3DS Capture?
 
-It was a play on words when I first tried to design a capture software with Qt (which is prononced "cute"). Although I didn't say with Qt, I liked the name.
+It was a play on words when I first tried to design a capture software for 3DS with Qt (which is prononced "cute"). Although I didn't stay with Qt, I liked the name Cute 3DS Capture and called the "port" for DS Cute DS Capture. Also, now I can call CDC and C3C (which is a very similar software but designed to work with a 3DS) "Cute Capture", if I refere to both of them.
