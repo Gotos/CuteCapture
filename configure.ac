@@ -3,9 +3,9 @@
 
 AC_PREREQ([2.69])
 AC_INIT(Cute3DSCapture, 1.3.1, cutecapture@alinas-chaos.de)
-AM_INIT_AUTOMAKE(Cute3DSCapture, 1.3.1)
 AC_CONFIG_SRCDIR([main.cpp])
 #AC_CONFIG_HEADERS([config.h])
+AM_INIT_AUTOMAKE
 
 # Checks for programs.
 AC_PROG_CXX
