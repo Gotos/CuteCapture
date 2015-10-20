@@ -9,4 +9,4 @@ LDFLAGS =
 bin_PROGRAMS = Cute3DSCapture
 Cute3DSCapture_SOURCES = main.cpp 3dscapture.h 3dscapture.c
 
-EXTRA_DIST = README.md 95-dscapture.rules
+EXTRA_DIST = README.md 95-3dscapture.rules
