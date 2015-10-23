@@ -1,3 +1,4 @@
+#define _DEFAULT_SOURCE
 #include "3dscapture.h"
 #include <stdio.h>
 #include <libusb-1.0/libusb.h>
