@@ -38,7 +38,6 @@ AS_IF([test "x$with_staticsfml" = "xyes"], [
 	AC_CHECK_LIB([X11-xcb],[main],,AC_MSG_ERROR([ *** Unable to find X11-xcb library]))
 	AC_CHECK_LIB([xcb],[main],,AC_MSG_ERROR([ *** Unable to find xcb library]))
 	AC_CHECK_LIB([xcb-randr],[main],,AC_MSG_ERROR([ *** Unable to find xcb-randr library]))
-	AC_CHECK_LIB([xcb-icccm],[main],,AC_MSG_ERROR([ *** Unable to find xcb-icccm library]))
 	AC_CHECK_LIB([xcb-image],[main],,AC_MSG_ERROR([ *** Unable to find xcb-image library]))
 	AC_CHECK_LIB([udev],[main],,AC_MSG_ERROR([ *** Unable to find udev library]))
 	AC_CHECK_LIB([pthread],[main],,AC_MSG_ERROR([ *** Unable to find pthread library]))
