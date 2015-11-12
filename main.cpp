@@ -75,6 +75,7 @@ int main()
     frames = 0;
     m_time = sf::Clock();
     sf::RenderWindow window(sf::VideoMode(400, 480), "Cute 3DS Capture");
+	window.setIcon(sfml_icon.width,  sfml_icon.height,  sfml_icon.pixel_data);
     sf::RenderWindow bottom_window;
     sf::RectangleShape top_screen(sf::Vector2f(240,400));
     top_screen.rotate(-90);
@@ -147,6 +148,7 @@ int main()
                         window.setView(top);
                         window.setSize(sf::Vector2u(400, 240));
                         bottom_window.create(sf::VideoMode(320, 240), "Bottom Screen Cute 3DS Capture");
+						bottom_window.setIcon(sfml_icon.width,  sfml_icon.height,  sfml_icon.pixel_data);
                         bottom_window.setView(bottom);
                         split = true;
                     } else {
@@ -245,10 +247,8 @@ int main()
         }
 
         window.clear();
-		window.setIcon(sfml_icon.width,  sfml_icon.height,  sfml_icon.pixel_data);
         if(split) {
             bottom_window.clear();
-			bottom_window.setIcon(sfml_icon.width,  sfml_icon.height,  sfml_icon.pixel_data);
         }
 
         if(!init) {
