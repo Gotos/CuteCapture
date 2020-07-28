@@ -3,12 +3,35 @@ extern "C" {
     #include "3dscapture.h"
 }
 #include <SFML/Graphics.hpp>
+#include <bits/stdc++.h>
 
 static sf::Clock m_time;
 static uint frames;
 static bool split;
 static bool ds_crop_mode;
 static bool init;
+static std::map<int, int> keycode_zoom_map{
+    { sf::Keyboard::Num0, 10},
+    { sf::Keyboard::Num1, 1},
+    { sf::Keyboard::Num2, 2},
+    { sf::Keyboard::Num3, 3},
+    { sf::Keyboard::Num4, 4},
+    { sf::Keyboard::Num5, 5},
+    { sf::Keyboard::Num6, 6},
+    { sf::Keyboard::Num7, 7},
+    { sf::Keyboard::Num8, 8},
+    { sf::Keyboard::Num9, 9},
+    { sf::Keyboard::Numpad0, 10},
+    { sf::Keyboard::Numpad1, 1},
+    { sf::Keyboard::Numpad2, 2},
+    { sf::Keyboard::Numpad3, 3},
+    { sf::Keyboard::Numpad4, 4},
+    { sf::Keyboard::Numpad5, 5},
+    { sf::Keyboard::Numpad6, 6},
+    { sf::Keyboard::Numpad7, 7},
+    { sf::Keyboard::Numpad8, 8},
+    { sf::Keyboard::Numpad9, 9}
+};
 
 void toRGBA(const uint8_t* rgb, uint8_t* rgba, const size_t count) {
     size_t i;
@@ -117,37 +140,41 @@ int main()
                 window.close();
                 break;
             case sf::Event::KeyPressed:
-                switch(event.key.code) {
-                case sf::Keyboard::Num1:
-                    window.setSize(sf::Vector2u(400, 240*(2-int(split))));
-                    break;
-                case sf::Keyboard::Num2:
-                    window.setSize(sf::Vector2u(600, 360*(2-int(split))));
-                    break;
-                case sf::Keyboard::Num3:
-                    window.setSize(sf::Vector2u(800, 480*(2-int(split))));
-                    break;
-                case sf::Keyboard::Num4:
-                    window.setSize(sf::Vector2u(1000, 600*(2-int(split))));
-                    break;
-                case sf::Keyboard::Num5:
-                    window.setSize(sf::Vector2u(1200, 720*(2-int(split))));
-                    break;
-                case sf::Keyboard::Num6:
-                    window.setSize(sf::Vector2u(1400, 840*(2-int(split))));
-                    break;
-                case sf::Keyboard::Num7:
-                    window.setSize(sf::Vector2u(1600, 960*(2-int(split))));
-                    break;
-                case sf::Keyboard::Num8:
-                    window.setSize(sf::Vector2u(1800, 1080*(2-int(split))));
-                    break;
-                case sf::Keyboard::Num9:
-                    window.setSize(sf::Vector2u(2000, 1200*(2-int(split))));
-                    break;
-                case sf::Keyboard::Num0:
-                    window.setSize(sf::Vector2u(2200, 1320*(2-int(split))));
-                    break;
+                switch(event.key.code) {    
+                    case sf::Keyboard::Num1:
+                    case sf::Keyboard::Num2:
+                    case sf::Keyboard::Num3:
+                    case sf::Keyboard::Num4:
+                    case sf::Keyboard::Num5:
+                    case sf::Keyboard::Num6:
+                    case sf::Keyboard::Num7:
+                    case sf::Keyboard::Num8:
+                    case sf::Keyboard::Num9:
+                    case sf::Keyboard::Num0:
+                    case sf::Keyboard::Numpad1:
+                    case sf::Keyboard::Numpad2:
+                    case sf::Keyboard::Numpad3:
+                    case sf::Keyboard::Numpad4:
+                    case sf::Keyboard::Numpad5:
+                    case sf::Keyboard::Numpad6:
+                    case sf::Keyboard::Numpad7:
+                    case sf::Keyboard::Numpad8:
+                    case sf::Keyboard::Numpad9:
+                    case sf::Keyboard::Numpad0:
+                    // Zoom adjustment when top or main window is focused
+                        if (!ds_crop_mode) {
+                            window.setSize(sf::Vector2u(
+                                (200 * keycode_zoom_map[event.key.code] + 200),
+                                (3 * (200 * keycode_zoom_map[event.key.code] + 200) / 5) * (2-int(split))
+                            ));
+                        } else {
+                            window.setSize(sf::Vector2u(
+                                (128 * keycode_zoom_map[event.key.code] + 128),
+                                (3 * (128 * keycode_zoom_map[event.key.code] + 128) / 4) * (2-int(split))
+                            ));
+                        }
+                    
+                        break;
                 case sf::Keyboard::C:
                 // Switch to/from crop mode
                 if (!ds_crop_mode) {
@@ -227,34 +254,38 @@ int main()
                 case sf::Event::KeyPressed:
                     switch(event.key.code) {
                     case sf::Keyboard::Num1:
-                        bottom_window.setSize(sf::Vector2u(320, 240));
-                        break;
                     case sf::Keyboard::Num2:
-                        bottom_window.setSize(sf::Vector2u(480, 360));
-                        break;
                     case sf::Keyboard::Num3:
-                        bottom_window.setSize(sf::Vector2u(640, 480));
-                        break;
                     case sf::Keyboard::Num4:
-                        bottom_window.setSize(sf::Vector2u(800, 600));
-                        break;
                     case sf::Keyboard::Num5:
-                        bottom_window.setSize(sf::Vector2u(960, 720));
-                        break;
                     case sf::Keyboard::Num6:
-                        bottom_window.setSize(sf::Vector2u(1120, 840));
-                        break;
                     case sf::Keyboard::Num7:
-                        bottom_window.setSize(sf::Vector2u(1280, 960));
-                        break;
                     case sf::Keyboard::Num8:
-                        bottom_window.setSize(sf::Vector2u(1440, 1080));
-                        break;
                     case sf::Keyboard::Num9:
-                        bottom_window.setSize(sf::Vector2u(1600, 1200));
-                        break;
                     case sf::Keyboard::Num0:
-                        bottom_window.setSize(sf::Vector2u(1760, 1320));
+                    case sf::Keyboard::Numpad1:
+                    case sf::Keyboard::Numpad2:
+                    case sf::Keyboard::Numpad3:
+                    case sf::Keyboard::Numpad4:
+                    case sf::Keyboard::Numpad5:
+                    case sf::Keyboard::Numpad6:
+                    case sf::Keyboard::Numpad7:
+                    case sf::Keyboard::Numpad8:
+                    case sf::Keyboard::Numpad9:
+                    case sf::Keyboard::Numpad0:
+                    // Zoom adjustment when bottom window is focused
+                        if (!ds_crop_mode) {
+                            bottom_window.setSize(sf::Vector2u(
+                                (160 * keycode_zoom_map[event.key.code] + 160),
+                                (3 * (160 * keycode_zoom_map[event.key.code] + 160) / 4)
+                            ));
+                        } else {
+                            bottom_window.setSize(sf::Vector2u(
+                                (128 * keycode_zoom_map[event.key.code] + 128),
+                                (3 * (128 * keycode_zoom_map[event.key.code] + 128) / 4) * (2-int(split))
+                            ));
+                        }
+                    
                         break;
                     case sf::Keyboard::C:
                         if (!ds_crop_mode) {
@@ -379,5 +410,3 @@ int main()
     capture_deinit();
     return 0;
 }
-
-
