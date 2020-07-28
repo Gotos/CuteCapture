@@ -7,6 +7,7 @@ extern "C" {
 static sf::Clock m_time;
 static uint frames;
 static bool split;
+static bool ds_crop_mode;
 static bool init;
 
 void toRGBA(const uint8_t* rgb, uint8_t* rgba, const size_t count) {
@@ -72,10 +73,11 @@ int main()
 {
     init = capture_init();
     split = false;
+    ds_crop_mode = false;
     frames = 0;
     m_time = sf::Clock();
     sf::RenderWindow window(sf::VideoMode(400, 480), "Cute 3DS Capture");
-	window.setIcon(sfml_icon.width,  sfml_icon.height,  sfml_icon.pixel_data);
+    window.setIcon(sfml_icon.width,  sfml_icon.height,  sfml_icon.pixel_data);
     sf::RenderWindow bottom_window;
     sf::RectangleShape top_screen(sf::Vector2f(240,400));
     top_screen.rotate(-90);
@@ -87,6 +89,9 @@ int main()
     sf::View total = sf::View(sf::FloatRect(0, 0, 400, 480));
     sf::View top = sf::View(sf::FloatRect(0, 0, 400, 240));
     sf::View bottom = sf::View(sf::FloatRect(40, 240, 320, 240));
+    sf::View ds_crop_combined = sf::View(sf::FloatRect(72, 48, 256, 384));
+    sf::View ds_crop_top = sf::View(sf::FloatRect(72, 48, 256, 192));
+    sf::View ds_crop_bottom = sf::View(sf::FloatRect(72, 240, 256, 192));
 
 
     sf::Texture texture;
@@ -143,17 +148,60 @@ int main()
                 case sf::Keyboard::Num0:
                     window.setSize(sf::Vector2u(2200, 1320*(2-int(split))));
                     break;
-                case sf::Keyboard::Space:
+                case sf::Keyboard::C:
+                // Switch to/from crop mode
+                if (!ds_crop_mode) {
                     if (!split) {
+                        window.setView(ds_crop_combined);
+                        window.setSize(sf::Vector2u(256, 384));
+                        ds_crop_mode = true;
+                    } else {
+                        window.setView(ds_crop_top);
+                        window.setSize(sf::Vector2u(256, 192));
+                        bottom_window.create(sf::VideoMode(256, 192), "Bottom Screen Cute 3DS Capture");
+                        bottom_window.setIcon(sfml_icon.width, sfml_icon.height, sfml_icon.pixel_data);
+                        bottom_window.setView(ds_crop_bottom);
+                        ds_crop_mode = true;
+                    }
+                } else {
+                    if (!split) {
+                        window.setView(total);
+                        window.setSize(sf::Vector2u(400, 480));
+                        ds_crop_mode = false;
+                    } else {
                         window.setView(top);
                         window.setSize(sf::Vector2u(400, 240));
                         bottom_window.create(sf::VideoMode(320, 240), "Bottom Screen Cute 3DS Capture");
-						bottom_window.setIcon(sfml_icon.width,  sfml_icon.height,  sfml_icon.pixel_data);
+                        bottom_window.setIcon(sfml_icon.width, sfml_icon.height, sfml_icon.pixel_data);
                         bottom_window.setView(bottom);
+                        ds_crop_mode = false;
+                    }
+                }
+                    break;
+                 case sf::Keyboard::Space:
+                    if (!split) {
+                        if (!ds_crop_mode) {
+                            window.setView(top);
+                            window.setSize(sf::Vector2u(400, 240));
+                            bottom_window.create(sf::VideoMode(320, 240), "Bottom Screen Cute 3DS Capture");
+                            bottom_window.setIcon(sfml_icon.width, sfml_icon.height, sfml_icon.pixel_data);
+                            bottom_window.setView(bottom);
+                        } else {
+                            window.setView(ds_crop_top);
+                            window.setSize(sf::Vector2u(256, 192));
+                            bottom_window.create(sf::VideoMode(256, 192), "Bottom Screen Cute 3DS Capture");
+                            bottom_window.setIcon(sfml_icon.width, sfml_icon.height, sfml_icon.pixel_data);
+                            bottom_window.setView(ds_crop_bottom);
+                        }
                         split = true;
                     } else {
-                        window.setView(total);
-                        window.setSize(sf::Vector2u(400, 480));
+                        if (!ds_crop_mode) {
+                            window.setView(total);
+                            window.setSize(sf::Vector2u(400, 480));
+                        } else {
+                            window.setView(ds_crop_combined);
+                            window.setSize(sf::Vector2u(256, 384));
+                        }
                         bottom_window.close();
                         split = false;
                     }
@@ -208,16 +256,59 @@ int main()
                     case sf::Keyboard::Num0:
                         bottom_window.setSize(sf::Vector2u(1760, 1320));
                         break;
+                    case sf::Keyboard::C:
+                        if (!ds_crop_mode) {
+                            if (!split) {
+                                window.setView(ds_crop_combined);
+                                window.setSize(sf::Vector2u(256, 384));
+                                ds_crop_mode = true;
+                            } else {
+                                window.setView(ds_crop_top);
+                                window.setSize(sf::Vector2u(256, 192));
+                                bottom_window.create(sf::VideoMode(256, 192), "Bottom Screen Cute 3DS Capture");
+                                bottom_window.setIcon(sfml_icon.width, sfml_icon.height, sfml_icon.pixel_data);
+                                bottom_window.setView(ds_crop_bottom);
+                                ds_crop_mode = true;
+                            }
+                        } else {
+                            if (!split) {
+                                window.setView(total);
+                                window.setSize(sf::Vector2u(400, 480));
+                                ds_crop_mode = false;
+                            } else {
+                                window.setView(top);
+                                window.setSize(sf::Vector2u(400, 240));
+                                bottom_window.create(sf::VideoMode(320, 240), "Bottom Screen Cute 3DS Capture");
+                                bottom_window.setIcon(sfml_icon.width, sfml_icon.height, sfml_icon.pixel_data);
+                                bottom_window.setView(bottom);
+                                ds_crop_mode = false;
+                            }
+                        }
+                        break;
                     case sf::Keyboard::Space:
                         if (!split) {
-                            window.setView(top);
-                            window.setSize(sf::Vector2u(400, 240));
-                            bottom_window.create(sf::VideoMode(320, 240), "Bottom Screen Cute 3DS Capture");
-                            bottom_window.setView(bottom);
+                            if (!ds_crop_mode) {
+                                window.setView(top);
+                                window.setSize(sf::Vector2u(400, 240));
+                                bottom_window.create(sf::VideoMode(320, 240), "Bottom Screen Cute 3DS Capture");
+                                bottom_window.setIcon(sfml_icon.width, sfml_icon.height, sfml_icon.pixel_data);
+                                bottom_window.setView(bottom);
+                            } else {
+                                window.setView(ds_crop_top);
+                                window.setSize(sf::Vector2u(256, 192));
+                                bottom_window.create(sf::VideoMode(256, 192), "Bottom Screen Cute 3DS Capture");
+                                bottom_window.setIcon(sfml_icon.width, sfml_icon.height, sfml_icon.pixel_data);
+                                bottom_window.setView(ds_crop_bottom);
+                            }
                             split = true;
                         } else {
-                            window.setView(total);
-                            window.setSize(sf::Vector2u(400, 480));
+                            if (!ds_crop_mode) {
+                                window.setView(total);
+                                window.setSize(sf::Vector2u(400, 480));
+                            } else {
+                                window.setView(ds_crop_combined);
+                                window.setSize(sf::Vector2u(256, 384));
+                            }
                             bottom_window.close();
                             split = false;
                         }
