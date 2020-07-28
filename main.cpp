@@ -101,6 +101,7 @@ int main()
     m_time = sf::Clock();
     sf::RenderWindow window(sf::VideoMode(400, 480), "Cute 3DS Capture");
     window.setIcon(sfml_icon.width,  sfml_icon.height,  sfml_icon.pixel_data);
+    window.setFramerateLimit(60);
     sf::RenderWindow bottom_window;
     sf::RectangleShape top_screen(sf::Vector2f(240,400));
     top_screen.rotate(-90);
