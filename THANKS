@@ -1,0 +1,12 @@
+Cute3DSCapture is possible thanks to the code of the following projects:
+
+SFML - Copyright (c) 2007-2019 Laurent Gomila - zlib/png license
+OpenAL-Soft - Copyright (c) the OpenAL-Soft developers - LGPLv2 or later
+FreeType - Copyright (c) 1996-2002, 2006 David Turner, Robert Wilhelm, and Werner Lemberg - FreeType License
+libogg - Copyright (c) 2002 Xiph.org Foundation - 3-clause BSD License
+libvorbis - Copyright (c) 2002-2020 Xiph.org Foundation - 3-clause BSD License
+libflac - Copyright (C) 2000-2009  Josh Coalson, Copyright (C) 2011-2016  Xiph.Org Foundation - 3-clause BSD License
+libusb-1.0.0 - Copyright (C) the libusb developers - LGPLv2.1 or later
+
+
+Thanks to loopy for providing sample code for how to read from the capture cards.
