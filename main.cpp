@@ -22,6 +22,7 @@ extern "C" {
     #include "3dscapture.h"
 #endif
 }
+#include "favicon.h"
 #include <SFML/Graphics.hpp>
 #include <map>
 
@@ -29,7 +30,9 @@ extern "C" {
 static sf::Clock m_time;
 static uint frames;
 static bool split;
+#ifndef DS
 static bool ds_crop_mode;
+#endif
 static bool init;
 static std::map<int, int> keycode_zoom_map {
     { sf::Keyboard::Num0, 10},
@@ -54,73 +57,24 @@ static std::map<int, int> keycode_zoom_map {
     { sf::Keyboard::Numpad9, 9}
 };
 
-void toRGBA(const uint8_t* rgb, uint8_t* rgba, const size_t count) {
-    size_t i;
-    for (i=0; i<count; i++) {
-        rgba[4*i] = rgb[3*i];
-        rgba[4*i+1] = rgb[3*i+1];
-        rgba[4*i+2] = rgb[3*i+2];
-        rgba[4*i+3] = 255;
-    }
-}
-
-
-/* GIMP RGBA C-Source image dump (favicon.c) */
-
-static const struct {
-  unsigned int 	 width;
-  unsigned int 	 height;
-  unsigned int 	 bytes_per_pixel; /* 2:RGB16, 3:RGB, 4:RGBA */ 
-  unsigned char	 pixel_data[16 * 16 * 4 + 1];
-} sfml_icon = {
-  16, 16, 4,
-  "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\374\2\4\377\374\2\4\377\374\2\4\377\374"
-  "\2\4\377\374\2\4\377\374\2\4\377\374\2\4\377\374\2\4\377\374\2\4\377\0\0"
-  "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\374\2\4\377\374\2\4\377\374"
-  "\2\4\377\374\2\4\377\374\2\4\377\374\2\4\377\374\2\4\377\374\2\4\377\374"
-  "\2\4\377\374\2\4\377\374\2\4\377\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
-  "\374\2\4\377\374\2\4\377\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
-  "\0\0\0\0\374\2\4\377\374\2\4\377\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
-  "\374\2\4\377\374\2\4\377\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
-  "\0\0\0\0\374\2\4\377\374\2\4\377\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
-  "\374\2\4\377\374\2\4\377\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
-  "\0\0\0\0\374\2\4\377\374\2\4\377\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
-  "\374\2\4\377\374\2\4\377\374\2\4\377\374\2\4\377\374\2\4\377\374\2\4\377"
-  "\374\2\4\377\374\2\4\377\374\2\4\377\374\2\4\377\374\2\4\377\0\0\0\0\0\0"
-  "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\374\2\4\377\374\2\4\377\374\2\4\377"
-  "\374\2\4\377\374\2\4\377\374\2\4\377\374\2\4\377\374\2\4\377\374\2\4\377"
-  "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
-  "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
-  "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\4\2\374\377\4\2\374\377\4\2\374"
-  "\377\4\2\374\377\4\2\374\377\4\2\374\377\4\2\374\377\4\2\374\377\4\2\374"
-  "\377\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\4\2\374\377\4\2\374"
-  "\377\4\2\374\377\4\2\374\377\4\2\374\377\4\2\374\377\4\2\374\377\4\2\374"
-  "\377\4\2\374\377\4\2\374\377\4\2\374\377\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
-  "\0\0\0\0\4\2\374\377\4\2\374\377\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
-  "\0\0\0\0\0\0\0\0\4\2\374\377\4\2\374\377\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
-  "\0\0\0\0\4\2\374\377\4\2\374\377\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
-  "\0\0\0\0\0\0\0\0\4\2\374\377\4\2\374\377\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
-  "\0\0\0\0\4\2\374\377\4\2\374\377\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
-  "\0\0\0\0\0\0\0\0\4\2\374\377\4\2\374\377\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
-  "\0\0\0\0\4\2\374\377\4\2\374\377\4\2\374\377\4\2\374\377\4\2\374\377\4\2"
-  "\374\377\4\2\374\377\4\2\374\377\4\2\374\377\4\2\374\377\4\2\374\377\0\0"
-  "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\4\2\374\377\4\2\374\377\4\2"
-  "\374\377\4\2\374\377\4\2\374\377\4\2\374\377\4\2\374\377\4\2\374\377\4\2"
-  "\374\377\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
-  "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
-  "\0\0\0\0\0\0\0\0",
-};
-
-
-
 int main()
 {
     init = capture_init();
     split = false;
+#ifndef DS
     ds_crop_mode = false;
+#endif
     frames = 0;
     m_time = sf::Clock();
-    sf::RenderWindow window(sf::VideoMode(400, 480), "Cute 3DS Capture");
+#ifdef DS
+    auto window_title = "Cute DS Capture";
+#else
+    auto window_title = "Cute 3DS Capture";
+#endif
+    char bottom_screen_title[40];
+    sprintf(bottom_screen_title, "Bottom Screen %s", window_title);
+
+    sf::RenderWindow window(sf::VideoMode(FRAMEWIDTH, FRAMEHEIGHT*2), window_title);
     window.setIcon(sfml_icon.width,  sfml_icon.height,  sfml_icon.pixel_data);
     window.setFramerateLimit(60);
     sf::RenderWindow bottom_window;
@@ -184,21 +138,26 @@ int main()
                     case sf::Keyboard::Numpad9:
                     case sf::Keyboard::Numpad0:
                     // Zoom adjustment when top or main window is focused
+#ifndef DS
                         if (!ds_crop_mode) {
                             window.setSize(sf::Vector2u(
                                 (200 * keycode_zoom_map[event.key.code] + 200),
                                 (3 * (200 * keycode_zoom_map[event.key.code] + 200) / 5) * (2-int(split))
                             ));
                         } else {
+#endif
                             window.setSize(sf::Vector2u(
                                 (128 * keycode_zoom_map[event.key.code] + 128),
                                 (3 * (128 * keycode_zoom_map[event.key.code] + 128) / 4) * (2-int(split))
                             ));
+#ifndef DS
                         }
+#endif
                     
                         break;
                 case sf::Keyboard::C:
                 // Switch to/from crop mode
+#ifndef DS
                 if (!ds_crop_mode) {
                     if (!split) {
                         window.setView(ds_crop_combined);
@@ -206,7 +165,7 @@ int main()
                     } else {
                         window.setView(ds_crop_top);
                         window.setSize(sf::Vector2u(256, 192));
-                        bottom_window.create(sf::VideoMode(256, 192), "Bottom Screen Cute 3DS Capture");
+                        bottom_window.create(sf::VideoMode(256, 192), bottom_screen_title);
                         bottom_window.setIcon(sfml_icon.width, sfml_icon.height, sfml_icon.pixel_data);
                         bottom_window.setView(ds_crop_bottom);
                     }
@@ -218,37 +177,46 @@ int main()
                     } else {
                         window.setView(top);
                         window.setSize(sf::Vector2u(400, 240));
-                        bottom_window.create(sf::VideoMode(320, 240), "Bottom Screen Cute 3DS Capture");
+                        bottom_window.create(sf::VideoMode(320, 240), bottom_screen_title);
                         bottom_window.setIcon(sfml_icon.width, sfml_icon.height, sfml_icon.pixel_data);
                         bottom_window.setView(bottom);
                     }
                     ds_crop_mode = false;
                 }
+#endif
                     break;
                  case sf::Keyboard::Space:
                     if (!split) {
+#ifndef DS
                         if (!ds_crop_mode) {
                             window.setView(top);
                             window.setSize(sf::Vector2u(400, 240));
-                            bottom_window.create(sf::VideoMode(320, 240), "Bottom Screen Cute 3DS Capture");
+                            bottom_window.create(sf::VideoMode(320, 240), bottom_screen_title);
                             bottom_window.setIcon(sfml_icon.width, sfml_icon.height, sfml_icon.pixel_data);
                             bottom_window.setView(bottom);
                         } else {
+#endif
                             window.setView(ds_crop_top);
                             window.setSize(sf::Vector2u(256, 192));
-                            bottom_window.create(sf::VideoMode(256, 192), "Bottom Screen Cute 3DS Capture");
+                            bottom_window.create(sf::VideoMode(256, 192), bottom_screen_title);
                             bottom_window.setIcon(sfml_icon.width, sfml_icon.height, sfml_icon.pixel_data);
                             bottom_window.setView(ds_crop_bottom);
+#ifndef DS
                         }
+#endif
                         split = true;
                     } else {
+#ifndef DS
                         if (!ds_crop_mode) {
                             window.setView(total);
                             window.setSize(sf::Vector2u(400, 480));
                         } else {
+#endif
                             window.setView(ds_crop_combined);
                             window.setSize(sf::Vector2u(256, 384));
+#ifndef DS
                         }
+#endif
                         bottom_window.close();
                         split = false;
                     }
@@ -294,19 +262,24 @@ int main()
                     case sf::Keyboard::Numpad9:
                     case sf::Keyboard::Numpad0:
                     // Zoom adjustment when bottom window is focused
+#ifndef DS
                         if (!ds_crop_mode) {
                             bottom_window.setSize(sf::Vector2u(
                                 (160 * keycode_zoom_map[event.key.code] + 160),
                                 (3 * (160 * keycode_zoom_map[event.key.code] + 160) / 4)
                             ));
                         } else {
+#endif
                             bottom_window.setSize(sf::Vector2u(
                                 (128 * keycode_zoom_map[event.key.code] + 128),
                                 (3 * (128 * keycode_zoom_map[event.key.code] + 128) / 4) * (2-int(split))
                             ));
+#ifndef DS
                         }
+#endif
                     
                         break;
+#ifndef DS
                     case sf::Keyboard::C:
                         if (!ds_crop_mode) {
                             if (!split) {
@@ -315,7 +288,7 @@ int main()
                             } else {
                                 window.setView(ds_crop_top);
                                 window.setSize(sf::Vector2u(256, 192));
-                                bottom_window.create(sf::VideoMode(256, 192), "Bottom Screen Cute 3DS Capture");
+                                bottom_window.create(sf::VideoMode(256, 192), bottom_screen_title);
                                 bottom_window.setIcon(sfml_icon.width, sfml_icon.height, sfml_icon.pixel_data);
                                 bottom_window.setView(ds_crop_bottom);
                             }
@@ -327,37 +300,46 @@ int main()
                             } else {
                                 window.setView(top);
                                 window.setSize(sf::Vector2u(400, 240));
-                                bottom_window.create(sf::VideoMode(320, 240), "Bottom Screen Cute 3DS Capture");
+                                bottom_window.create(sf::VideoMode(320, 240), bottom_screen_title);
                                 bottom_window.setIcon(sfml_icon.width, sfml_icon.height, sfml_icon.pixel_data);
                                 bottom_window.setView(bottom);
                             }
                             ds_crop_mode = false;
                         }
                         break;
+#endif
                     case sf::Keyboard::Space:
                         if (!split) {
+#ifndef DS
                             if (!ds_crop_mode) {
                                 window.setView(top);
                                 window.setSize(sf::Vector2u(400, 240));
-                                bottom_window.create(sf::VideoMode(320, 240), "Bottom Screen Cute 3DS Capture");
+                                bottom_window.create(sf::VideoMode(320, 240), bottom_screen_title);
                                 bottom_window.setIcon(sfml_icon.width, sfml_icon.height, sfml_icon.pixel_data);
                                 bottom_window.setView(bottom);
                             } else {
+#endif
                                 window.setView(ds_crop_top);
                                 window.setSize(sf::Vector2u(256, 192));
-                                bottom_window.create(sf::VideoMode(256, 192), "Bottom Screen Cute 3DS Capture");
+                                bottom_window.create(sf::VideoMode(256, 192), bottom_screen_title);
                                 bottom_window.setIcon(sfml_icon.width, sfml_icon.height, sfml_icon.pixel_data);
                                 bottom_window.setView(ds_crop_bottom);
+#ifndef DS
                             }
+#endif
                             split = true;
                         } else {
+#ifndef DS
                             if (!ds_crop_mode) {
                                 window.setView(total);
                                 window.setSize(sf::Vector2u(400, 480));
                             } else {
+#endif
                                 window.setView(ds_crop_combined);
                                 window.setSize(sf::Vector2u(256, 384));
+#ifndef DS
                             }
+#endif
                             bottom_window.close();
                             split = false;
                         }
@@ -377,9 +359,9 @@ int main()
         if (m_time.getElapsedTime().asMilliseconds() > 250) {
             char title[50];
             if (!split) {
-                sprintf(title,"Cute 3DS Capture (%.2f FPS)", float(frames)/(m_time.getElapsedTime().asSeconds()));
+                sprintf(title, "%s (%.2f FPS)", window_title, float(frames)/(m_time.getElapsedTime().asSeconds()));
             } else {
-                sprintf(title,"Top Screen Cute 3DS Capture (%4.2f FPS)", float(frames)/(m_time.getElapsedTime().asSeconds()));
+                sprintf(title,"Top Screen %s (%4.2f FPS)", window_title, float(frames)/(m_time.getElapsedTime().asSeconds()));
             }
             m_time.restart();
             frames = 0;
@@ -397,26 +379,34 @@ int main()
 
 #ifdef DS
         uint16_t frameBuf[FRAMEBUFSIZE];
-        uint16_t rgbaBuf[FRAMESIZE*4/3];
 #else
         uint8_t frameBuf[FRAMEBUFSIZE];
-        uint8_t rgbaBuf[FRAMESIZE*4/3];
 #endif
+        uint8_t rgbaBuf[FRAMESIZE*4/3];
+
         if(init){
+#ifdef DS
+            if(capture_grabFrame(frameBuf)) {
+                toRGBA(rgbaBuf,frameBuf);
+                texture.update(rgbaBuf,int(FRAMEWIDTH),int(FRAMEHEIGHT*2),0,0);
+            } else {
+                capture_deinit();
+                init = false;
+            }
+#else
             switch(capture_grabFrame(frameBuf)) {
             case CAPTURE_OK:
-                toRGBA(frameBuf,rgbaBuf,FRAMESIZE/3);
+                toRGBA(frameBuf,rgbaBuf);
                 texture.update(rgbaBuf,int(FRAMEWIDTH),int(FRAMEHEIGHT),0,0);
                 break;
             case CAPTURE_ERROR:
                 capture_deinit();
                 init = false;
                 break;
-            /*case CAPTURE_SKIP:
-                break;*/
             default:
                 break;
             }
+#endif
         }
 
         window.draw(top_screen);
