@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.69])
-AC_INIT(Cute3DSCapture, 1.4, cutecapture@alinas-chaos.de)
+AC_INIT(CuteCapture, 1.4, cutecapture@alinas-chaos.de)
 AC_CONFIG_SRCDIR([main.cpp])
 #AC_CONFIG_HEADERS([config.h])
 AM_INIT_AUTOMAKE
