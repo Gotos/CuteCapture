@@ -74,7 +74,11 @@ int main()
     char bottom_screen_title[40];
     sprintf(bottom_screen_title, "Bottom Screen %s", window_title);
 
+#ifdef DS
     sf::RenderWindow window(sf::VideoMode(FRAMEWIDTH, FRAMEHEIGHT*2), window_title);
+#else
+    sf::RenderWindow window(sf::VideoMode(400, 480), window_title);
+#endif
     window.setIcon(sfml_icon.width,  sfml_icon.height,  sfml_icon.pixel_data);
     window.setFramerateLimit(60);
     sf::RenderWindow bottom_window;
