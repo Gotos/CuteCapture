@@ -1,13 +1,11 @@
 .deps/
-3dscapture.o
-dscapture.o
+*.o
 Cute3DSCapture
 CuteDSCapture
 Makefile
 autom4te.cache/
 config.log
 config.status
-main.o
 Makefile.in
 aclocal.m4
 compile

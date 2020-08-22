@@ -129,3 +129,13 @@ uint8_t capture_getVersion() {
     readConfig(_3DSCFG_BITSTREAM_VER, &version, 1);
     return version;
 }
+
+void toRGBA(const uint8_t* rgb, uint8_t* rgba) {
+    size_t i;
+    for (i = 0; i < FRAMESIZE / 3; i++) {
+        rgba[4*i] = rgb[3*i];
+        rgba[4*i+1] = rgb[3*i+1];
+        rgba[4*i+2] = rgb[3*i+2];
+        rgba[4*i+3] = 255;
+    }
+}
