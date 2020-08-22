@@ -12,7 +12,7 @@ bin_PROGRAMS = Cute3DSCapture CuteDSCapture
 Cute3DSCapture_SOURCES = main.cpp 3dscapture.h 3dscapture.c
 
 CuteDSCapture_SOURCES = main.cpp dscapture.h dscapture.c
-CuteDSCaputre_CPPFLAGS = -DDS
+CuteDSCapture_CPPFLAGS = -DDS
 
 if STATIC
 LDADD = @staticsfmldir@/libsfml-graphics-s.a @staticsfmldir@/libsfml-window-s.a @staticsfmldir@/libsfml-system-s.a
