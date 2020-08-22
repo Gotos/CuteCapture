@@ -50,6 +50,7 @@ AS_IF([test "x$with_staticsfml" = "xyes"], [
 	AC_CHECK_LIB([sfml-graphics],[main],,AC_MSG_ERROR([ *** Unable to find SFML graphics library (http://www.sfml-dev.org/)]))
 ])
 AM_CONDITIONAL(STATIC, test "x$with_staticsfml" = "xyes")
+AM_CONDITIONAL(DEBUG, test "x$debug" = "xyes")
 
 AC_CHECK_LIB([usb-1.0],[main],,AC_MSG_ERROR([ *** Unable to find libusb1.0]))
 
