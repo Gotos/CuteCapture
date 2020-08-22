@@ -16,10 +16,15 @@
 
 #include <stdio.h>
 extern "C" {
+#ifdef DS
+    #include "dscapture.h"
+#else
     #include "3dscapture.h"
+#endif
 }
 #include <SFML/Graphics.hpp>
 #include <map>
+
 
 static sf::Clock m_time;
 static uint frames;
@@ -390,8 +395,13 @@ int main()
             init = capture_init();
         }
 
+#ifdef DS
+        uint16_t frameBuf[FRAMEBUFSIZE];
+        uint16_t rgbaBuf[FRAMESIZE*4/3];
+#else
         uint8_t frameBuf[FRAMEBUFSIZE];
         uint8_t rgbaBuf[FRAMESIZE*4/3];
+#endif
         if(init){
             switch(capture_grabFrame(frameBuf)) {
             case CAPTURE_OK:

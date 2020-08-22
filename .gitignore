@@ -1,6 +1,8 @@
 .deps/
 3dscapture.o
+dscapture.o
 Cute3DSCapture
+CuteDSCapture
 Makefile
 autom4te.cache/
 config.log
