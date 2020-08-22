@@ -16,9 +16,9 @@ LDFLAGS =
 # the previous manual Makefile
 bin_PROGRAMS = Cute3DSCapture CuteDSCapture
 
-Cute3DSCapture_SOURCES = main.cpp 3dscapture.h 3dscapture.c
+Cute3DSCapture_SOURCES = main.cpp 3dscapture.h 3dscapture.c helpers.h helpers.cpp
 
-CuteDSCapture_SOURCES = main.cpp dscapture.h dscapture.c
+CuteDSCapture_SOURCES = main.cpp dscapture.h dscapture.c helpers.h helpers.cpp
 CuteDSCapture_CPPFLAGS = -DDS
 
 if STATIC

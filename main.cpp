@@ -23,6 +23,7 @@ extern "C" {
 #endif
 }
 #include "favicon.h"
+#include "helpers.h"
 #include <SFML/Graphics.hpp>
 #include <map>
 
@@ -392,7 +393,7 @@ int main()
         }
 
         frames++;
-        if (m_time.getElapsedTime().asMilliseconds() > 250) {
+        if (m_time.getElapsedTime().asMilliseconds() > 500) {
             char title[50];
             if (!split) {
                 sprintf(title, "%s (%.2f FPS)", window_title, float(frames)/(m_time.getElapsedTime().asSeconds()));
@@ -414,7 +415,7 @@ int main()
         }
 
 #ifdef DS
-        uint16_t frameBuf[FRAMEBUFSIZE];
+        uint16_t frameBuf[FRAMEHEIGHT*FRAMEWIDTH*2];
         uint8_t rgbaBuf[FRAMEHEIGHT*FRAMEWIDTH*2*4];
 #else
         uint8_t frameBuf[FRAMEBUFSIZE];

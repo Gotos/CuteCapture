@@ -151,19 +151,3 @@ bool capture_grabFrame(uint16_t *frameBuf) {
     }
     return true;
 }
-
-void toRGBA(uint8_t *out, uint16_t *in) {
-    int i;
-    for(i=0;i<FRAMEWIDTH*FRAMEHEIGHT*2;i++) {
-        unsigned char r,g,b;
-        g=((*in)>>5)&0x3f;
-        b=((*in<<1)&0x3e)|(g&1);
-        r=(((*in)>>10)&0x3e)|(g&1);
-        out[0]=(r<<2) | (r>>4);
-        out[1]=(g<<2) | (g>>4);
-        out[2]=(b<<2) | (b>>4);
-        out[3]=255;
-        out+=4;
-        in++;
-    }
-}
