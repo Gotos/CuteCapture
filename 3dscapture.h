@@ -18,5 +18,3 @@ bool capture_init();
 void capture_deinit();
 int capture_grabFrame(uint8_t *frameBuf);
 uint8_t capture_getVersion();
-
-void toRGBA(const uint8_t* rgb, uint8_t* rgba);
