@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=CuteDSCapture
+Type=Application
+Comment=A software used to capture Nintendo DS modded with a capture board by loopy
+Exec=CuteDSCapture
+TryExec=CuteDSCapture
+Icon=CuteDSCapture
+Categories=Game;

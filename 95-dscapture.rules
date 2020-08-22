@@ -1,0 +1,2 @@
+# Give r/w access to DS Capture board
+SUBSYSTEM=="usb", ATTR{idVendor}=="16d0", ATTR{idProduct}=="0647", MODE="0666"
