@@ -78,6 +78,16 @@ int main()
     window.setIcon(sfml_icon.width,  sfml_icon.height,  sfml_icon.pixel_data);
     window.setFramerateLimit(60);
     sf::RenderWindow bottom_window;
+
+#ifdef DS
+    sf::RectangleShape top_screen(sf::Vector2f(FRAMEWIDTH, FRAMEHEIGHT));
+    sf::RectangleShape bottom_screen(sf::Vector2f(FRAMEWIDTH, FRAMEHEIGHT));
+    bottom_screen.setPosition(0,FRAMEHEIGHT);
+
+    sf::View total = sf::View(sf::FloatRect(0, 0, FRAMEWIDTH, FRAMEHEIGHT*2));
+    sf::View top = sf::View(sf::FloatRect(0, 0, FRAMEWIDTH, FRAMEHEIGHT));
+    sf::View bottom = sf::View(sf::FloatRect(0, FRAMEHEIGHT, FRAMEWIDTH, FRAMEHEIGHT));
+#else
     sf::RectangleShape top_screen(sf::Vector2f(240,400));
     top_screen.rotate(-90);
     top_screen.setPosition(0,240);
@@ -91,17 +101,29 @@ int main()
     sf::View ds_crop_combined = sf::View(sf::FloatRect(72, 48, 256, 384));
     sf::View ds_crop_top = sf::View(sf::FloatRect(72, 48, 256, 192));
     sf::View ds_crop_bottom = sf::View(sf::FloatRect(72, 240, 256, 192));
+#endif
 
 
     sf::Texture texture;
     uint8_t tex[] = {0,0,0,255};
+#ifdef DS
+    texture.create(int(FRAMEWIDTH),int(FRAMEHEIGHT) * 2);
+#else
     texture.create(int(FRAMEWIDTH),int(FRAMEHEIGHT));
+#endif
     texture.update(tex,1,1,0,0);
 
+#ifdef DS
+    top_screen.setTexture(&texture);
+    top_screen.setTextureRect(sf::IntRect(0, 0, FRAMEWIDTH, FRAMEHEIGHT));
+    bottom_screen.setTexture(&texture);
+    bottom_screen.setTextureRect(sf::IntRect(0, FRAMEHEIGHT, FRAMEWIDTH, FRAMEHEIGHT));
+#else
     top_screen.setTexture(&texture);
     top_screen.setTextureRect(sf::IntRect(0,0,240,400));
     bottom_screen.setTexture(&texture);
     bottom_screen.setTextureRect(sf::IntRect(0,400,240,320));
+#endif
 
     while (window.isOpen())
     {
@@ -195,14 +217,18 @@ int main()
                             bottom_window.setIcon(sfml_icon.width, sfml_icon.height, sfml_icon.pixel_data);
                             bottom_window.setView(bottom);
                         } else {
-#endif
                             window.setView(ds_crop_top);
                             window.setSize(sf::Vector2u(256, 192));
                             bottom_window.create(sf::VideoMode(256, 192), bottom_screen_title);
                             bottom_window.setIcon(sfml_icon.width, sfml_icon.height, sfml_icon.pixel_data);
                             bottom_window.setView(ds_crop_bottom);
-#ifndef DS
                         }
+#else
+                        window.setView(top);
+                        window.setSize(sf::Vector2u(FRAMEWIDTH, FRAMEHEIGHT));
+                        bottom_window.create(sf::VideoMode(FRAMEWIDTH, FRAMEHEIGHT), "Bottom Screen Cute DS Capture");
+                        bottom_window.setIcon(sfml_icon.width,  sfml_icon.height,  sfml_icon.pixel_data);
+                        bottom_window.setView(bottom);
 #endif
                         split = true;
                     } else {
@@ -211,11 +237,12 @@ int main()
                             window.setView(total);
                             window.setSize(sf::Vector2u(400, 480));
                         } else {
-#endif
                             window.setView(ds_crop_combined);
                             window.setSize(sf::Vector2u(256, 384));
-#ifndef DS
                         }
+#else
+                        window.setView(total);
+                        window.setSize(sf::Vector2u(FRAMEWIDTH, FRAMEHEIGHT * 2));
 #endif
                         bottom_window.close();
                         split = false;
@@ -318,14 +345,18 @@ int main()
                                 bottom_window.setIcon(sfml_icon.width, sfml_icon.height, sfml_icon.pixel_data);
                                 bottom_window.setView(bottom);
                             } else {
-#endif
                                 window.setView(ds_crop_top);
                                 window.setSize(sf::Vector2u(256, 192));
                                 bottom_window.create(sf::VideoMode(256, 192), bottom_screen_title);
                                 bottom_window.setIcon(sfml_icon.width, sfml_icon.height, sfml_icon.pixel_data);
                                 bottom_window.setView(ds_crop_bottom);
-#ifndef DS
                             }
+#else
+                            window.setView(top);
+                            window.setSize(sf::Vector2u(FRAMEWIDTH, FRAMEHEIGHT));
+                            bottom_window.create(sf::VideoMode(FRAMEWIDTH, FRAMEHEIGHT), "Bottom Screen Cute DS Capture");
+                            bottom_window.setIcon(sfml_icon.width,  sfml_icon.height,  sfml_icon.pixel_data);
+                            bottom_window.setView(bottom);
 #endif
                             split = true;
                         } else {
@@ -334,11 +365,12 @@ int main()
                                 window.setView(total);
                                 window.setSize(sf::Vector2u(400, 480));
                             } else {
-#endif
                                 window.setView(ds_crop_combined);
                                 window.setSize(sf::Vector2u(256, 384));
-#ifndef DS
                             }
+#else
+                            window.setView(total);
+                            window.setSize(sf::Vector2u(FRAMEWIDTH, FRAMEHEIGHT * 2));
 #endif
                             bottom_window.close();
                             split = false;
@@ -361,7 +393,7 @@ int main()
             if (!split) {
                 sprintf(title, "%s (%.2f FPS)", window_title, float(frames)/(m_time.getElapsedTime().asSeconds()));
             } else {
-                sprintf(title,"Top Screen %s (%4.2f FPS)", window_title, float(frames)/(m_time.getElapsedTime().asSeconds()));
+                sprintf(title,"Top Screen %s (%.2f FPS)", window_title, float(frames)/(m_time.getElapsedTime().asSeconds()));
             }
             m_time.restart();
             frames = 0;
@@ -379,10 +411,11 @@ int main()
 
 #ifdef DS
         uint16_t frameBuf[FRAMEBUFSIZE];
+        uint8_t rgbaBuf[FRAMEHEIGHT*FRAMEWIDTH*2*4];
 #else
         uint8_t frameBuf[FRAMEBUFSIZE];
-#endif
         uint8_t rgbaBuf[FRAMESIZE*4/3];
+#endif
 
         if(init){
 #ifdef DS

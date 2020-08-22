@@ -1,8 +1,15 @@
 AUTOMAKE_OPTIONS = foreign
 
 # what flags you want to pass to the C compiler & linker
-CFLAGS = --pedantic -Wall -std=c99 -O2 -s
+CFLAGS = --pedantic -Wall -std=c99 -s
 CXXFLAGS = -std=c++11
+
+if DEBUG
+CFLAGS += -g
+else
+CFLAGS += -O2
+endif
+
 LDFLAGS =
 
 # this lists the binaries to produce, the (non-PHONY, binary) targets in
