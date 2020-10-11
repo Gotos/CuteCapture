@@ -13,7 +13,7 @@ jobs:
       - name: Build
         run: |
           sudo apt-get install -y libusb-1.0.0-dev libsfml-dev
-          ./autogen.sh && ./configure && make .
+          ./autogen.sh && ./configure && make
   macos:
     runs-on: macOS-latest
     steps:
@@ -23,9 +23,11 @@ jobs:
         run: |
           # versions: libusb@1.0.23 and sfml@2.5.1 at time of writing
           brew install autoconf automake libtool libusb sfml
-          ./autogen.sh && ./configure && make .
+          ./autogen.sh && ./configure && make
       - name: Link
         run: |
+          ls
+
           # copy these dynamic libs over to be bundled
           cp /usr/local/opt/libusb/lib/libusb-1.0.0.dylib /usr/local/opt/sfml/lib/libsfml-window.2.5.dylib /usr/local/opt/sfml/lib/libsfml-graphics.2.5.dylib /usr/local/opt/sfml/lib/libsfml-system.2.5.dylib .
 
