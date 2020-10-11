@@ -1,4 +1,4 @@
-name: Build and Link CuteCapture
+name: Build and Release CuteCapture
 on:
   push:
     branches: [master, gh-actions]
@@ -14,8 +14,27 @@ jobs:
         run: |
           sudo apt-get install -y libusb-1.0.0-dev libsfml-dev
           ./autogen.sh && ./configure && make
+      - name: Create Draft Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: true
+          prerelease: false
+      - uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./Cute3DSCapture
+          asset_name: Cute3DSCapture.linux
+          asset_content_type: application/octet-stream
   macos:
     runs-on: macOS-latest
+    needs: [linux]
     steps:
       - name: Checkout
         uses: actions/checkout@v1
@@ -24,7 +43,7 @@ jobs:
           # versions: libusb@1.0.23 and sfml@2.5.1 at time of writing
           brew install autoconf automake libtool libusb sfml
           ./autogen.sh && ./configure && make
-      - name: Link
+      - name: Link Deps
         run: |
           # copy these dynamic libs and inter-deps over to be bundled, change perms
           cp /usr/local/opt/libusb/lib/libusb-1.0.0.dylib /usr/local/opt/sfml/lib/libsfml-window.2.5.dylib /usr/local/opt/sfml/lib/libsfml-graphics.2.5.dylib /usr/local/opt/sfml/lib/libsfml-system.2.5.dylib .
@@ -45,3 +64,17 @@ jobs:
           # some more inter-dependent dylibs
           install_name_tool -change /usr/local/opt/libpng/lib/libpng16.16.dylib @executable_path/libpng16.16.dylib ./libfreetype.6.dylib
           install_name_tool -change /usr/local/opt/freetype/lib/libfreetype.6.dylib @executable_path/libfreetype.6.dylib ./libsfml-graphics.2.5.dylib
+      - name: Update Release
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./Cute3DSCapture
+          asset_name: Cute3DSCapture.mac
+          asset_content_type: application/octet-stream
+      - uses: eregon/publish-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          release_id: ${{ steps.create_release.outputs.id }}
