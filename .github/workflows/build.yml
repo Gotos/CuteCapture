@@ -12,7 +12,7 @@ jobs:
         uses: actions/checkout@v1
       - name: Build
         run: |
-          sudo apt-get install -y libusb sfml
+          sudo apt-get install -y libusb-1.0.0-dev libsfml-dev
           ./autogen.sh && ./configure && make .
   macos:
     runs-on: macOS-latest
@@ -21,8 +21,8 @@ jobs:
         uses: actions/checkout@v1
       - name: Build
         run: |
-          # versions 1.0.23 and 2.5.1 respectively
-          brew install libusb sfml
+          # versions: libusb@1.0.23 and sfml@2.5.1 at time of writing
+          brew install autoconf automake libtool libusb sfml
           ./autogen.sh && ./configure && make .
       - name: Link
         run: |
@@ -30,7 +30,7 @@ jobs:
           cp /usr/local/opt/libusb/lib/libusb-1.0.0.dylib /usr/local/opt/sfml/lib/libsfml-window.2.5.dylib /usr/local/opt/sfml/lib/libsfml-graphics.2.5.dylib /usr/local/opt/sfml/lib/libsfml-system.2.5.dylib .
 
           # these are inter-deps that we'll need later as well
-          cp /usr/local/opt/libpng/lib/libpng16.16.dylib /usr/local/opt/freetype/lib/libfreetype.6.dylib
+          cp /usr/local/opt/libpng/lib/libpng16.16.dylib /usr/local/opt/freetype/lib/libfreetype.6.dylib .
 
           # edit binary to have libusb and sfml relatively linked
           # (can check with otool -L Cute3DSCapture to see current dylib paths)
