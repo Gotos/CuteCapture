@@ -17,14 +17,18 @@ jobs:
         run: |
           sudo apt-get install -y libusb-1.0.0-dev libsfml-dev
           ./autogen.sh && ./configure && make
+          chmod +x Cute3DSCapture
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d_%H-%M-%S')"
       - name: Create Draft Release
         id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
+          tag_name: ${{ steps.date.outputs.date }}
+          release_name: Nightly ${{ steps.date.outputs.date }}
           draft: true
           prerelease: true
       - name: Upload Binary
@@ -52,7 +56,8 @@ jobs:
           # copy these dynamic libs and inter-deps over to be bundled, change perms
           cp /usr/local/opt/libusb/lib/libusb-1.0.0.dylib /usr/local/opt/sfml/lib/libsfml-window.2.5.dylib /usr/local/opt/sfml/lib/libsfml-graphics.2.5.dylib /usr/local/opt/sfml/lib/libsfml-system.2.5.dylib .
           cp /usr/local/opt/libpng/lib/libpng16.16.dylib /usr/local/opt/freetype/lib/libfreetype.6.dylib .
-          chmod 777 libusb-1.0.0.dylib libsfml-window.2.5.dylib libsfml-graphics.2.5.dylib libsfml-system.2.5.dylib libpng16.16.dylib libfreetype.6.dylib
+          chmod 777 *.dylib
+          chmod +x Cute3DSCapture
 
           # edit binary to have libusb and sfml relatively linked (can check with otool -L Cute3DSCapture to see current dylib paths)
           install_name_tool -change /usr/local/opt/libusb/lib/libusb-1.0.0.dylib @executable_path/libusb-1.0.0.dylib Cute3DSCapture
@@ -68,15 +73,21 @@ jobs:
           # some more inter-dependent dylibs
           install_name_tool -change /usr/local/opt/libpng/lib/libpng16.16.dylib @executable_path/libpng16.16.dylib ./libfreetype.6.dylib
           install_name_tool -change /usr/local/opt/freetype/lib/libfreetype.6.dylib @executable_path/libfreetype.6.dylib ./libsfml-graphics.2.5.dylib
-      - name: Upload Static Binary
+      - name: Create App Bundle
+        run: |
+          mkdir -p Cute3DSCapture.app/Contents/MacOS
+          cp Cute3DSCapture *.dylib Cute3DSCapture.app/Contents/MacOS
+          cp Info.plist Cute3DSCapture.app/Contents
+          zip -r Cute3DSCapture.zip Cute3DSCapture.app
+      - name: Upload Zip
         uses: actions/upload-release-asset@v1.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ needs.linux.outputs.upload_url }}
-          asset_path: ./Cute3DSCapture
-          asset_name: Cute3DSCapture.mac
-          asset_content_type: application/octet-stream
+          asset_path: ./Cute3DSCapture.zip
+          asset_name: Cute3DSCapture.mac.zip
+          asset_content_type: application/zip
       - name: Publish Release
         uses: eregon/publish-release@v1
         env:
