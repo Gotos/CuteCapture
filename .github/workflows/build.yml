@@ -1,7 +1,7 @@
 name: Build and Release CuteCapture
 on:
   push:
-    branches: [master, gh-actions]
+    branches: [master]
   pull_request:
     branches: [master]
 jobs:
