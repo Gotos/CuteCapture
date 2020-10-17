@@ -15,10 +15,9 @@ jobs:
           sudo apt-get install -y libusb-1.0.0-dev libsfml-dev
           ./autogen.sh && ./configure --with-staticsfml && make
           chmod +x Cute3DSCapture
+          zip -r Cute3DSCapture.zip Cute3DSCapture
       - name: Upload Zip
         uses: actions/upload-artifact@master
-        run: |
-          zip -r Cute3DSCapture.zip Cute3DSCapture
         with:
           name: Cute3DSCapture.linux.zip
           path: ./Cute3DSCapture.zip
@@ -33,10 +32,9 @@ jobs:
           brew install autoconf automake libtool libusb sfml
           ./autogen.sh && ./configure && make
           ./make_macos_app.sh
+          zip -r Cute3DSCapture.zip Cute3DSCapture.app
       - name: Upload Zip
         uses: actions/upload-artifact@master
-        run: |
-          zip -r Cute3DSCapture.zip Cute3DSCapture.app
         with:
           name: Cute3DSCapture.mac.zip
           path: ./Cute3DSCapture.zip
