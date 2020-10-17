@@ -12,9 +12,8 @@ jobs:
         uses: actions/checkout@v1
       - name: Build and Link
         run: |
-          sudo apt-get install -y libusb-1.0.0-dev libsfml-dev libxcb-image0-dev \
-            libudev-dev libpthread-stubs0-dev libfreetype6-dev libjpeg-dev libgl-dev
-          ./autogen.sh && ./configure --with-staticsfml && make
+          sudo apt-get install -y libusb-1.0.0-dev libsfml-dev
+          ./autogen.sh && ./configure && make
           chmod +x Cute3DSCapture
           zip -r Cute3DSCapture.zip Cute3DSCapture
       - name: Upload Zip
