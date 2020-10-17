@@ -10,55 +10,33 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v1
-      - name: Build
+      - name: Build and Link
         run: |
           sudo apt-get install -y libusb-1.0.0-dev libsfml-dev
-          ./autogen.sh && ./configure && make
+          ./autogen.sh && ./configure --with-staticsfml && make
           chmod +x Cute3DSCapture
-          # TODO: make binary statically linked as well (until then needs libusb+libsfml installed)
-      - name: Upload Binary
+      - name: Upload Zip
         uses: actions/upload-artifact@master
+        run: |
+          zip -r Cute3DSCapture.zip Cute3DSCapture
         with:
-          name: Cute3DSCapture.linux
-          path: ./Cute3DSCapture
+          name: Cute3DSCapture.linux.zip
+          path: ./Cute3DSCapture.zip
   macos:
     runs-on: macOS-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v1
-      - name: Build
+      - name: Build and Link
         run: |
           # versions: libusb@1.0.23 and sfml@2.5.1 at time of writing
           brew install autoconf automake libtool libusb sfml
           ./autogen.sh && ./configure && make
-      - name: Link Deps
-        run: |
-          # copy these dynamic libs and inter-deps over to be bundled, change perms
-          cp /usr/local/opt/libusb/lib/libusb-1.0.0.dylib /usr/local/opt/sfml/lib/libsfml-window.2.5.dylib /usr/local/opt/sfml/lib/libsfml-graphics.2.5.dylib /usr/local/opt/sfml/lib/libsfml-system.2.5.dylib .
-          cp /usr/local/opt/libpng/lib/libpng16.16.dylib /usr/local/opt/freetype/lib/libfreetype.6.dylib .
-          chmod 777 *.dylib
-          chmod +x Cute3DSCapture
-
-          # edit binary to have libusb and sfml relatively linked (can check with otool -L Cute3DSCapture to see current dylib paths)
-          install_name_tool -change /usr/local/opt/libusb/lib/libusb-1.0.0.dylib @executable_path/libusb-1.0.0.dylib Cute3DSCapture
-          install_name_tool -change /usr/local/opt/sfml/lib/libsfml-window.2.5.dylib @executable_path/libsfml-window.2.5.dylib Cute3DSCapture
-          install_name_tool -change /usr/local/opt/sfml/lib/libsfml-graphics.2.5.dylib @executable_path/libsfml-graphics.2.5.dylib Cute3DSCapture
-          install_name_tool -change /usr/local/opt/sfml/lib/libsfml-system.2.5.dylib @executable_path/libsfml-system.2.5.dylib Cute3DSCapture
-
-          # adjust some of the dylibs to internally reference these relative dylibs as well (can also check with otool -L <dylib>)
-          install_name_tool -change @rpath/libsfml-window.2.5.dylib @executable_path/libsfml-window.2.5.dylib ./libsfml-graphics.2.5.dylib
-          install_name_tool -change @rpath/libsfml-system.2.5.dylib @executable_path/libsfml-system.2.5.dylib ./libsfml-graphics.2.5.dylib
-          install_name_tool -change @rpath/libsfml-system.2.5.dylib @executable_path/libsfml-system.2.5.dylib ./libsfml-window.2.5.dylib
-          install_name_tool -change /usr/local/opt/libpng/lib/libpng16.16.dylib @executable_path/libpng16.16.dylib ./libfreetype.6.dylib
-          install_name_tool -change /usr/local/opt/freetype/lib/libfreetype.6.dylib @executable_path/libfreetype.6.dylib ./libsfml-graphics.2.5.dylib
-      - name: Create App Bundle
-        run: |
-          mkdir -p Cute3DSCapture.app/Contents/MacOS
-          cp Cute3DSCapture *.dylib Cute3DSCapture.app/Contents/MacOS
-          cp Info.plist Cute3DSCapture.app/Contents
-          zip -r Cute3DSCapture.zip Cute3DSCapture.app
+          ./make_macos_app.sh
       - name: Upload Zip
         uses: actions/upload-artifact@master
+        run: |
+          zip -r Cute3DSCapture.zip Cute3DSCapture.app
         with:
           name: Cute3DSCapture.mac.zip
           path: ./Cute3DSCapture.zip
