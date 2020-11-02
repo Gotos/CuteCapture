@@ -19,14 +19,14 @@ extern "C" {
     #include "3dscapture.h"
 }
 #include <SFML/Graphics.hpp>
-#include <bits/stdc++.h>
+#include <map>
 
 static sf::Clock m_time;
 static uint frames;
 static bool split;
 static bool ds_crop_mode;
 static bool init;
-static std::map<int, int> keycode_zoom_map{
+static std::map<int, int> keycode_zoom_map {
     { sf::Keyboard::Num0, 10},
     { sf::Keyboard::Num1, 1},
     { sf::Keyboard::Num2, 2},

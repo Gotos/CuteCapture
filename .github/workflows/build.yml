@@ -1,0 +1,40 @@
+name: Build CuteCapture
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+jobs:
+  linux:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Build and Link
+        run: |
+          sudo apt-get install -y libusb-1.0.0-dev libsfml-dev
+          ./autogen.sh && ./configure && make
+          chmod +x Cute3DSCapture
+          zip -r Cute3DSCapture.zip Cute3DSCapture
+      - name: Upload Zip
+        uses: actions/upload-artifact@master
+        with:
+          name: Cute3DSCapture.linux.zip
+          path: ./Cute3DSCapture.zip
+  macos:
+    runs-on: macOS-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Build and Link
+        run: |
+          # versions: libusb@1.0.23 and sfml@2.5.1 at time of writing
+          brew install autoconf automake libtool libusb sfml
+          ./autogen.sh && ./configure && make
+          ./make_macos_app.sh
+          zip -r Cute3DSCapture.zip Cute3DSCapture.app
+      - name: Upload Zip
+        uses: actions/upload-artifact@master
+        with:
+          name: Cute3DSCapture.mac.zip
+          path: ./Cute3DSCapture.zip
