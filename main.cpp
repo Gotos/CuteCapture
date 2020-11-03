@@ -15,6 +15,7 @@
  */
 
 #include <stdio.h>
+#include <unistd.h>
 extern "C" {
 #ifdef DS
     #include "dscapture.h"
@@ -81,7 +82,6 @@ int main()
     sf::RenderWindow window(sf::VideoMode(400, 480), window_title);
 #endif
     window.setIcon(sfml_icon.width,  sfml_icon.height,  sfml_icon.pixel_data);
-    window.setFramerateLimit(60);
     sf::RenderWindow bottom_window;
 
 #ifdef DS
@@ -411,6 +411,7 @@ int main()
         }
 
         if(!init) {
+            usleep(1000*20); //20 milliseconds
             init = capture_init();
         }
 
