@@ -31,7 +31,7 @@ install_name_tool -change /usr/local/opt/libpng/lib/libpng16.16.dylib @executabl
 install_name_tool -change /usr/local/opt/freetype/lib/libfreetype.6.dylib @executable_path/libfreetype.6.dylib ./libsfml-graphics.2.5.dylib
 
 # make Info.plist with version from configure.ac
-VERSION=$(cat configure.ac | grep AC_INIT | awk '{print $2}' | tr -d ,)
+VERSION=$(./get_version.sh)
 
 
 # Build Cute3DSCapture bundle
