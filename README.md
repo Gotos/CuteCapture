@@ -10,7 +10,7 @@ Install SFML and the SFML-headers (libsfml-dev or similar) as well as libusb-1.0
 
 Start CuteDSCapture or Cute3DSCapture, depending on your console. You can autoresize the window with 1-0 (1x, 1.5x, 2x,... original size). Press the spacebar to toggle window split. In Cute 3DS Capture, press C to toggle cropping to the original DS resolution (you can start DS titles in the original resolution when playing on 3DS by hold START or SELECT when launching the game).
 
-If CuteCapture doesn't detect your handheld console and you are using linux, copy `95-3dscapture.rules` and/or `95-dscapture.rules` to /etc/udev/rules.d and reload udev-rules with `udevadm control --reload-rules`.
+If CuteCapture doesn't detect your handheld console and you are using linux, copy `95-3dscapture.rules` and/or `95-dscapture.rules` to /etc/udev/rules.d and reload udev-rules with `udevadm control --reload-rules`. You can also just run `install_udev_rules.sh`, which does this for you.
 
 # Why "Cute" Capture?
 
