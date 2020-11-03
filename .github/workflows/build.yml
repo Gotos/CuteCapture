@@ -65,3 +65,14 @@ jobs:
             README.md
             LICENSE
             THANKS
+  release:
+    needs: [linux, macos]
+    if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Test
+        run: |
+          TAG_MESSAGE=$(git tag -l --format='%(contents)' ${GITHUB_REF#refs/tags/})
+          echo $TAG_MESSAGE
