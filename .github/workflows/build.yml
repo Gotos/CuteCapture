@@ -2,6 +2,8 @@ name: Build CuteCapture
 on:
   push:
     branches: [master]
+    tags:
+      - 'v*.*.*'
   pull_request:
     branches: [master]
 jobs:
@@ -10,6 +12,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v1
+      - name: Set env
+        run: |
+          REF_END="${GITHUB_REF#refs/}"
+          REF_MID="${REF_END%%/*}"
+          if [ "$REF_MID" = "tags" ]; then
+            echo "CC_VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+          fi
       - name: Build and Link
         run: |
           sudo apt-get install -y libusb-1.0.0-dev libsfml-dev
@@ -33,6 +42,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v1
+      - name: Set env
+        run: |
+          REF_END="${GITHUB_REF#refs/}"
+          REF_MID="${REF_END%%/*}"
+          if [ "$REF_MID" = "tags" ]; then
+            echo "CC_VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+          fi
       - name: Build and Link
         run: |
           # versions: libusb@1.0.23 and sfml@2.5.1 at time of writing
