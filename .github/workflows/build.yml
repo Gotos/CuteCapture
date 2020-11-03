@@ -17,7 +17,6 @@ jobs:
           chmod +x Cute3DSCapture
           chmod +x CuteDSCapture
           chmod +x install_udev_rules.sh
-          zip -r Cute3DSCapture.zip Cute3DSCapture CuteDSCapture install_udev_rules.sh
       - name: Upload Zip
         uses: actions/upload-artifact@master
         with:
@@ -26,6 +25,9 @@ jobs:
             Cute3DSCapture
             CuteDSCapture
             install_udev_rules.sh
+            README.md
+            LICENSE
+            THANKS
   macos:
     runs-on: macOS-latest
     steps:
@@ -44,3 +46,6 @@ jobs:
           path: |
             CuteDSCapture.app
             Cute3DSCapture.app
+            README.md
+            LICENSE
+            THANKS
