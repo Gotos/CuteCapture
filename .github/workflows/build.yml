@@ -22,7 +22,10 @@ jobs:
         uses: actions/upload-artifact@master
         with:
           name: CuteCapture.linux.zip
-          path: ./Cute3DSCapture.zip
+          path: |
+            Cute3DSCapture
+            CuteDSCapture
+            install_udev_rules.sh
   macos:
     runs-on: macOS-latest
     steps:
@@ -34,10 +37,10 @@ jobs:
           brew install autoconf automake libtool libusb sfml
           ./autogen.sh && ./configure && make
           ./make_macos_app.sh
-          zip -r Cute3DSCapture.zip Cute3DSCapture.app
-          zip -r CuteDSCapture.zip CuteDSCapture.app
       - name: Upload Zip
         uses: actions/upload-artifact@master
         with:
           name: CuteCapture.mac.zip
-          path: ./Cute*DSCapture.zip
+          path: |
+            CuteDSCapture.app
+            Cute3DSCapture.app
