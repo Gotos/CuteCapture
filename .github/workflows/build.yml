@@ -7,8 +7,8 @@ on:
   pull_request:
     branches: [master]
 jobs:
-  linux:
-    runs-on: ubuntu-latest
+  linux-sfml-2-4:
+    runs-on: ubuntu-18.04
     steps:
       - name: Checkout
         uses: actions/checkout@v1
@@ -29,7 +29,37 @@ jobs:
       - name: Upload Zip
         uses: actions/upload-artifact@master
         with:
-          name: CuteCapture.linux.zip
+          name: CuteCapture-sfml-2.4.linux.zip
+          path: |
+            Cute3DSCapture
+            CuteDSCapture
+            install_udev_rules.sh
+            README.md
+            LICENSE
+            THANKS
+  linux-sfml-2-5:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Set env
+        run: |
+          REF_END="${GITHUB_REF#refs/}"
+          REF_MID="${REF_END%%/*}"
+          if [ "$REF_MID" = "tags" ]; then
+            echo "CC_VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+          fi
+      - name: Build and Link
+        run: |
+          sudo apt-get install -y libusb-1.0.0-dev libsfml-dev
+          ./autogen.sh && ./configure && make
+          chmod +x Cute3DSCapture
+          chmod +x CuteDSCapture
+          chmod +x install_udev_rules.sh
+      - name: Upload Zip
+        uses: actions/upload-artifact@master
+        with:
+          name: CuteCapture-sfml-2.5.linux.zip
           path: |
             Cute3DSCapture
             CuteDSCapture
@@ -66,7 +96,7 @@ jobs:
             LICENSE
             THANKS
   release:
-    needs: [linux, macos]
+    needs: [linux-sfml-2-4, linux-sfml-2-5, macos]
     if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/')
     runs-on: ubuntu-latest
     steps:
