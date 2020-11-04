@@ -18,6 +18,8 @@ jobs:
           REF_MID="${REF_END%%/*}"
           if [ "$REF_MID" = "tags" ]; then
             echo "CC_VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+          else
+            echo "CC_VERSION=${{ github.sha }}}" >> $GITHUB_ENV
           fi
       - name: Build and Link
         run: |
@@ -48,6 +50,8 @@ jobs:
           REF_MID="${REF_END%%/*}"
           if [ "$REF_MID" = "tags" ]; then
             echo "CC_VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+          else
+            echo "CC_VERSION=${{ github.sha }}}" >> $GITHUB_ENV
           fi
       - name: Build and Link
         run: |
@@ -78,6 +82,8 @@ jobs:
           REF_MID="${REF_END%%/*}"
           if [ "$REF_MID" = "tags" ]; then
             echo "CC_VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+          else
+            echo "CC_VERSION=dev-${{ github.sha }}" >> $GITHUB_ENV
           fi
       - name: Build and Link
         run: |
