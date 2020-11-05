@@ -12,7 +12,9 @@ Go to [the releases page](https://github.com/Gotos/Cute3DSCapture/releases) and 
 
 ## Linux
 
-To run CuteCapture, you will need to first install SFML and libusb-1.0. On a Debian-based distribution like Ubuntu you are likely able to install these by executing `sudo apt-get install libusb-1.0-0 libsfml`.
+To run CuteCapture, you will need to first install SFML and libusb-1.0. On a Debian-based distribution like Ubuntu you are likely able to install these by executing `sudo apt-get install libusb-1.0-0 libsfml-dev`.
+
+(Installing the dev-package of SFML is not strictly needed, but at least on Ubuntu way easier as there is no  other package that installs all required SFML libraries without knowing the supported version.)
 
 During installation, try to pay attention to the SFML version that is being installed. On modern distributions, at the time of writting, the version will likely be 2.4 or 2.5. If you notice which version was installed, you can try the rest for both version.
 
