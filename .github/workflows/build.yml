@@ -22,17 +22,12 @@ jobs:
           chmod +x Cute3DSCapture
           chmod +x CuteDSCapture
           chmod +x install_udev_rules.sh
+          zip -r CuteCapture.zip Cute3DSCapture CuteDSCapture install_udev_rules.sh README.md LICENSE THANKS
       - name: Upload Zip
         uses: actions/upload-artifact@master
         with:
           name: CuteCapture-sfml-2.4.linux.zip
-          path: |
-            Cute3DSCapture
-            CuteDSCapture
-            install_udev_rules.sh
-            README.md
-            LICENSE
-            THANKS
+          path: ./CuteCapture.zip
   linux-sfml-2-5:
     runs-on: ubuntu-20.04
     steps:
@@ -48,17 +43,12 @@ jobs:
           chmod +x Cute3DSCapture
           chmod +x CuteDSCapture
           chmod +x install_udev_rules.sh
+          zip -r CuteCapture.zip Cute3DSCapture CuteDSCapture install_udev_rules.sh README.md LICENSE THANKS
       - name: Upload Zip
         uses: actions/upload-artifact@master
         with:
           name: CuteCapture-sfml-2.5.linux.zip
-          path: |
-            Cute3DSCapture
-            CuteDSCapture
-            install_udev_rules.sh
-            README.md
-            LICENSE
-            THANKS
+          path: ./CuteCapture.zip
   macos:
     runs-on: macOS-latest
     steps:
@@ -73,16 +63,12 @@ jobs:
           brew install autoconf automake libtool libusb sfml
           ./autogen.sh && ./configure && make
           ./make_macos_app.sh
+          zip -r CuteCapture.zip CuteDSCapture.app Cute3DSCapture.app README.md LICENSE THANKS
       - name: Upload Zip
         uses: actions/upload-artifact@master
         with:
           name: CuteCapture.mac.zip
-          path: |
-            CuteDSCapture.app
-            Cute3DSCapture.app
-            README.md
-            LICENSE
-            THANKS
+          path: ./CuteCapture.zip
   release:
     needs: [linux-sfml-2-4, linux-sfml-2-5, macos]
     if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/')
