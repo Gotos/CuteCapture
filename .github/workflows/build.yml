@@ -92,6 +92,8 @@ jobs:
           draft: false
           prerelease: false
           body: ${{ steps.get_version.outputs.message }}
+      - name: Download all workflow run artifacts
+        uses: actions/download-artifact@v2
       - name: Upload MacOS artifacts
         id: upload-release-asset-macos
         uses: actions/upload-release-asset@v1
@@ -99,7 +101,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./CuteCapture.mac.zip
+          asset_path: CuteCapture.mac.zip/CuteCapture.zip
           asset_name: CuteCapture.mac.zip
           asset_content_type: application/zip
       - name: Upload Linux/SFML2.4 artifacts
@@ -109,7 +111,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./CuteCapture-sfml-2.4.linux.zip
+          asset_path: CuteCapture-sfml-2.4.linux.zip/CuteCapture.zip
           asset_name: CuteCapture-sfml-2.4.linux.zip
           asset_content_type: application/zip
       - name: Upload Linux/SFML2.5 artifacts
@@ -119,6 +121,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./CuteCapture-sfml-2.5.linux.zip
+          asset_path: CuteCapture-sfml-2.5.linux.zip/CuteCapture.zip
           asset_name: CuteCapture-sfml-2.5.linux.zip
           asset_content_type: application/zip
