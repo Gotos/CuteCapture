@@ -17,6 +17,7 @@ jobs:
           echo "CC_VERSION=$(./get_version.sh)" >> $GITHUB_ENV
       - name: Build and Link
         run: |
+          sudo apt-get update
           sudo apt-get install -y libusb-1.0.0-dev libsfml-dev
           ./autogen.sh && ./configure && make
           chmod +x Cute3DSCapture
@@ -38,6 +39,7 @@ jobs:
           echo "CC_VERSION=$(./get_version.sh)" >> $GITHUB_ENV
       - name: Build and Link
         run: |
+          sudo apt-get update
           sudo apt-get install -y libusb-1.0.0-dev libsfml-dev
           ./autogen.sh && ./configure && make
           chmod +x Cute3DSCapture
