@@ -53,7 +53,7 @@ jobs:
     runs-on: macOS-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v3
       - name: Set env
         run: |
           echo "CC_VERSION=$(./get_version.sh)" >> $GITHUB_ENV
@@ -75,7 +75,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v3
       - name: Get Version and Message
         id: get_version
         run: |
